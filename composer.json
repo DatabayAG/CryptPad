@@ -1,0 +1,12 @@
+{
+    "name": "fhelfer/crypt-pad",
+    "authors": [
+        {
+            "name": "Fabian Helfer",
+            "email": "fhelfer@nb-fhelfer.office.databay.de"
+        }
+    ],
+    "require": {
+        "ext-dom": "*"
+    }
+}
