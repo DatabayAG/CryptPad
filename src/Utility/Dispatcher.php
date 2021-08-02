@@ -65,8 +65,10 @@ class Dispatcher
             case "setStatusToInProgress":
             case "setStatusToNotAttempted":
                 $cmd = 'DefaultController.' . $cmd;
+                break;
             case "":
                 $cmd = 'DefaultController.showContent';
+                break;
         }
 
         $controller = $this->getController($cmd);

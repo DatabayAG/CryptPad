@@ -24,6 +24,8 @@ use ilLPStatusWrapper;
 /**
  * Class ExerciseDownload.
  *
+ * @ilCtrl_isCalledBy: Cryptpad\Controller\DefaultController: ilObjPluginDispatchGUI, ilObjCryptPadGUI
+ *
  * @author  Timo Müller <timomueller@databay.de>
  */
 class DefaultController extends RepositoryObject
@@ -60,68 +62,6 @@ class DefaultController extends RepositoryObject
         $this->plugin = \ilCryptPadPlugin::getInstance();
         $this->ctrl->saveParameter($this->getCoreController(), 'ref_id');
     }
-
-/**
-* Edit Properties. This commands uses the form class to display an input form.
-*/
-    protected function editProperties()
-    {
-        $this->tabs->activateTab("properties");
-        $form = $this->initPropertiesForm();
-        $this->addValuesToForm($form);
-        $this->tpl->setContent($form->getHTML());
-    }
-
-    /**
-     * @return ilPropertyFormGUI
-     */
-    protected function initPropertiesForm() {
-        $form = new ilPropertyFormGUI();
-        $form->setTitle($this->plugin->txt("obj_xtst"));
-
-        $title = new ilTextInputGUI($this->plugin->txt("title"), "title");
-        $title->setRequired(true);
-        $form->addItem($title);
-
-        $description = new ilTextInputGUI($this->plugin->txt("description"), "description");
-        $form->addItem($description);
-
-        $online = new ilCheckboxInputGUI($this->plugin->txt("online"), "online");
-        $form->addItem($online);
-
-        $form->setFormAction($this->ctrl->getFormAction($this, "saveProperties"));
-        $form->addCommandButton("saveProperties", $this->plugin->txt("update"));
-
-        return $form;
-    }
-
-    /**
-     * @param $form ilPropertyFormGUI
-     */
-    protected function addValuesToForm(&$form) {
-        $form->setValuesByArray(array(
-            "title" => $this->getCoreController()->object->getTitle(),
-            "description" => $this->getCoreController()->object->getDescription(),
-            "online" => $this->getCoreController()->object->isOnline(),
-        ));
-    }
-
-    /**
-     *
-     */
-    protected function saveProperties() {
-        $form = $this->initPropertiesForm();
-        $form->setValuesByPost();
-        if($form->checkInput()) {
-            $this->fillObject($this->getCoreController()->object, $form);
-            $this->getCoreController()->object->update();
-            ilUtil::sendSuccess($this->plugin->txt("update_successful"), true);
-            $this->ctrl->redirect($this, "editProperties");
-        }
-
-    return $form->getHTML();
-    }
-
 
     public function showContentCmd() {
 
@@ -171,47 +111,6 @@ class DefaultController extends RepositoryObject
         $template->setVariable("LP_INFO", $this->plugin->txt("lp_status_info"));
 
         return $template->get();
-    }
-
-    /**
-     * @param $object ilObjCryptPad
-     * @param $form ilPropertyFormGUI
-     */
-    private function fillObject($object, $form) {
-        $object->setTitle($form->getInput('title'));
-        $object->setDescription($form->getInput('description'));
-        $object->setOnline($form->getInput('online'));
-    }
-
-    protected function showExport() {
-        require_once("./Services/Export/classes/class.ilExportGUI.php");
-        $export = new ilExportGUI($this);
-        $export->addFormat("xml");
-        $ret = $this->ctrl->forwardCommand($export);
-
-    }
-
-    private function setStatusToCompleted() {
-        $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_COMPLETED_NUM);
-    }
-
-    private function setStatusAndRedirect($status) {
-        global $ilUser;
-        $_SESSION[$this->getCoreController()::LP_SESSION_ID] = $status;
-        ilLPStatusWrapper::_updateStatus($this->getCoreController()->object->getId(), $ilUser->getId());
-        $this->ctrl->redirect($this, $this->getStandardCmd());
-    }
-
-    protected function setStatusToFailed() {
-        $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_FAILED_NUM);
-    }
-
-    protected function setStatusToInProgress() {
-        $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_IN_PROGRESS_NUM);
-    }
-
-    protected function setStatusToNotAttempted() {
-        $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM);
     }
 
     public function getDefaultCommand() : string
