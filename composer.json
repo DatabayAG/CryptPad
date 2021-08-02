@@ -1,11 +1,17 @@
 {
     "name": "fhelfer/crypt-pad",
+    "type": "project",
     "authors": [
         {
             "name": "Fabian Helfer",
             "email": "fhelfer@nb-fhelfer.office.databay.de"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "CryptPad\\" : "src/"
+        }
+    },
     "require": {
         "ext-dom": "*"
     }
