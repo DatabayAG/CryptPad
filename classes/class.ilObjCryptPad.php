@@ -9,6 +9,15 @@ require_once("./Customizing/global/plugins/Services/Repository/RepositoryObject/
 class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
 {
     /**
+     * @var ?string
+     */
+    protected $docType;
+    /**
+     * @var ?string
+     */
+    protected $docId;
+
+    /**
      * Constructor
      *
      * @access        public
@@ -35,11 +44,10 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
         global $ilDB;
 
         $ilDB->manipulate("INSERT INTO rep_robj_xcrp_data ".
-            "(id, is_online, option_one, option_two) VALUES (".
+            "(id, is_online, doc_type, doc_id) VALUES (".
             $ilDB->quote($this->getId(), "integer").",".
             $ilDB->quote(0, "integer").",".
-            $ilDB->quote("default 1", "text").",".
-            $ilDB->quote("default 2", "text").
+            "null,null".
             ")");
     }
 
@@ -56,6 +64,9 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
         while ($rec = $ilDB->fetchAssoc($set))
         {
             $this->setOnline($rec["is_online"]);
+            $this->setDocType($rec['doc_type']);
+            $this->setDocId($rec['doc_id']);
+
         }
     }
 
@@ -67,7 +78,9 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
         global $ilDB;
 
         $ilDB->manipulate($up = "UPDATE rep_robj_xcrp_data SET ".
-            " is_online = ".$ilDB->quote($this->isOnline(), "integer")."".
+            " is_online = ".$ilDB->quote($this->isOnline(), "integer").", ".
+            " doc_type = ".$ilDB->quote($this->getDocType(), "text").", ".
+            " doc_id = ".$ilDB->quote($this->getDocId(), "text")." ".
             " WHERE id = ".$ilDB->quote($this->getId(), "integer")
         );
     }
@@ -92,10 +105,11 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
         global $ilDB;
 
         $new_obj->setOnline($this->isOnline());
-        $new_obj->setOptionOne($this->getOptionOne());
-        $new_obj->setOptionTwo($this->getOptionTwo());
+        $new_obj->setDocType($this->getDocType());
+        $new_obj->setDocId($this->getDocId());
         $new_obj->update();
     }
+
 
     /**
      * Set online
@@ -116,6 +130,40 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     {
         return $this->online;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getDocType() : ?string
+    {
+        return $this->docType;
+    }
+
+    /**
+     * @param ?string $docType
+     */
+    public function setDocType(?string $docType) : void
+    {
+        $this->docType = $docType;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDocId() : ?string
+    {
+        return $this->docId;
+    }
+
+    /**
+     * @param ?string $docId
+     */
+    public function setDocId(?string $docId) : void
+    {
+        $this->docId = $docId;
+    }
+
+
 
     /**
      * Get all user ids with LP status completed
