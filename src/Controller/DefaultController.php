@@ -20,6 +20,7 @@ use ilLPStatusPlugin;
 use ilExportGUI;
 use ilLPStatus;
 use ilLPStatusWrapper;
+use CryptPad\Services\CryptPadService;
 
 /**
  * Class ExerciseDownload.
@@ -64,7 +65,7 @@ class DefaultController extends RepositoryObject
     }
 
     public function showContentCmd() {
-
+        $this->getCoreController()->tabs->activateTab('content');
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'http://localhost:3000/pad/');
         curl_setopt($ch, CURLOPT_HEADER, TRUE);
@@ -80,7 +81,9 @@ class DefaultController extends RepositoryObject
         $html = $dom->saveHTML();
         $body = $dom->getElementsByTagName('body')->item(0);
 
-        $url = "http://localhost:3000/";
+        $cryptPadService = CryptPadService::getInstance();
+
+        $url = "http://" . $cryptPadService->getServer() . "/";
         $type = $this->getCoreController()->object->getDocType();
         $id = $this->getCoreController()->object->getDocId();
         if($type & $id) {

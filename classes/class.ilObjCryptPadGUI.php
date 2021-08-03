@@ -181,7 +181,6 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         if ($ilAccess->checkAccess("write", "", $this->object->getRefId()))
         {
             $this->tabs->addTab("properties", $this->txt("properties"), $ilCtrl->getLinkTarget($this, "editProperties"));
-            $this->tabs->addTab("export", $this->txt("export"), $ilCtrl->getLinkTargetByClass("ilexportgui", ""));
         }
 
         // standard permission tab
@@ -220,7 +219,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
      */
     protected function initPropertiesForm() {
         $form = new ilPropertyFormGUI();
-        $form->setTitle($this->plugin->txt("obj_xtst"));
+        $form->setTitle($this->plugin->txt("obj_xcrp"));
 
         $title = new ilTextInputGUI($this->plugin->txt("title"), "title");
         $title->setRequired(true);

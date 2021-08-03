@@ -1,20 +1,20 @@
-obj_xcrp#:#Test Repository Object
-objs_xcrp#:#Test Repository Objects
+obj_xcrp#:#CryptPad Object
+objs_xcrp#:#CryptPad Objects
 obj_xcrp_duplicate#:#Copy
-objs_xcrp_duplicate#:#Copy Test Repository Objects
-obj_xcrp_select#:#Select Test Repository Object
-xcrp_add#:#Add Test Repository Object
-xcrp_new#:#Add New Test Repository Object
-xcrp_read#:#Read access to Test Repository Object
-xcrp_write#:#Edit Test Repository Object
-xcrp_delete#:#Delete Test Repository Object
-xcrp_visible#:#Test Repository Object is visible
+objs_xcrp_duplicate#:#Copy CryptPad Objects
+obj_xcrp_select#:#Select CryptPad Object
+xcrp_add#:#Add CryptPad Object
+xcrp_new#:#Add New CryptPad Object
+xcrp_read#:#Read access to CryptPad Object
+xcrp_write#:#Edit CryptPad Object
+xcrp_delete#:#Delete CryptPad Object
+xcrp_visible#:#CryptPad Object is visible
 xcrp_edit_permission#:#Change permission settings
-crs_create_xcrp#:#Create Test Repository Object
-grp_create_xcrp#:#Create Test Repository Object
-fold_create_xcrp#:#Create Test Repository Object
-root_create_xcrp#:#Create Test Repository Object
-cat_create_xcrp#:#Create Test Repository Object
+crs_create_xcrp#:#Create CryptPad Object
+grp_create_xcrp#:#Create CryptPad Object
+fold_create_xcrp#:#Create CryptPad Object
+root_create_xcrp#:#Create CryptPad Object
+cat_create_xcrp#:#Create CryptPad Object
 title#:#Title
 description#:#Description
 online#:#Online
@@ -38,3 +38,7 @@ lp_status_#:#No state yet.
 lp_status_info#:#Attention: Setting the LP Status will set the LP status of the currently logged in user to the chosen Stauts. THE STATUS OF EVERY OTHER USER WILL BE SET TO NOT ATTEMPTED!
 offline:#:Offline
 members#:#Members
+update_successful#:#Update successful
+doctype#:#Document Type
+docid#:#Document Link Id
+placeholder-select#:#Please select a document type
