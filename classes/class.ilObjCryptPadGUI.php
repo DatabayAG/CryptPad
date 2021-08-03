@@ -181,7 +181,6 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         if ($ilAccess->checkAccess("write", "", $this->object->getRefId()))
         {
             $this->tabs->addTab("properties", $this->txt("properties"), $ilCtrl->getLinkTarget($this, "editProperties"));
-            $this->tabs->addTab("members", $this->txt("members"), $ilCtrl->getLinkTarget($this, "MemberController.showOverview"));
             $this->tabs->addTab("export", $this->txt("export"), $ilCtrl->getLinkTargetByClass("ilexportgui", ""));
         }
 
