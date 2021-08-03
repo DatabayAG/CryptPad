@@ -240,8 +240,11 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         ]);
         $form->addItem($type);
 
-        $docId = new ilTextInputGUI($this->plugin->txt("docId"), 'docId');
-        $form->addItem($docId);
+        $docWriteId = new ilTextInputGUI($this->plugin->txt("docWriteId"), 'docWriteId');
+        $form->addItem($docWriteId);
+
+        $docReadId = new ilTextInputGUI($this->plugin->txt("docReadId"), 'docReadId');
+        $form->addItem($docReadId);
 
         $form->setFormAction($this->ctrl->getFormAction($this, "saveProperties"));
         $form->addCommandButton("saveProperties", $this->plugin->txt("update"));
@@ -258,11 +261,12 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
             "description" => $this->object->getDescription(),
             "online" => $this->object->isOnline(),
             'docType' => $this->object->getDocType(),
-            'docId' => $this->object->getDocId(),
+            'docWriteId' => $this->object->getDocWriteId(),
+            'docReadId' => $this->object->getDocReadId(),
 
         ));
     }
-
+//y8RdQaJPCbN6nG37civ5RZRK || k3s+ZKXa5A2oK0mxENkCgTKk
     /**
      *
      */
@@ -319,7 +323,8 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $object->setDescription($form->getInput('description'));
         $object->setOnline($form->getInput('online'));
         $object->setDocType($form->getInput('docType'));
-        $object->setDocId($form->getInput('docId'));
+        $object->setDocWriteId($form->getInput('docWriteId'));
+        $object->setDocReadId($form->getInput('docReadId'));
     }
 
     protected function showExport() {

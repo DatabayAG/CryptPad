@@ -17,16 +17,22 @@ $fields = array(
         'fixed' => false,
         'notnull' => false
     ),
-    'doc_id' => array(
+    'doc_write_id' => array(
         'type' => 'text',
-        'length' => 24,
+        'length' => 127,
+        'fixed' => false,
+        'notnull' => false
+    ),
+    'doc_read_id' => array(
+        'type' => 'text',
+        'length' => 127,
         'fixed' => false,
         'notnull' => false
     )
 );
-//if ($ilDB->tableExists('rep_robj_xcrp_data')) {
-//    $ilDB->dropTable('rep_robj_xcrp_data');
-//}
+if ($ilDB->tableExists('rep_robj_xcrp_data')) {
+    $ilDB->dropTable('rep_robj_xcrp_data');
+}
 $ilDB->createTable("rep_robj_xcrp_data", $fields);
 $ilDB->addPrimaryKey("rep_robj_xcrp_data", array("id"));
 ?>

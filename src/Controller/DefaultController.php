@@ -85,9 +85,9 @@ class DefaultController extends RepositoryObject
 
         $url = "http://" . $cryptPadService->getServer() . "/";
         $type = $this->getCoreController()->object->getDocType();
-        $id = $this->getCoreController()->object->getDocId();
+        $id = $this->getCoreController()->object->getDocReadId();
         if($type & $id) {
-            $url.= $type . '/#/2/' . $type . '/edit/' . $id;
+            $url.= $type . '/#/2/' . $type . '/view/' . $id;
         }
 
 
