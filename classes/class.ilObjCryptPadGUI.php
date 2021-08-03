@@ -181,6 +181,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         if ($ilAccess->checkAccess("write", "", $this->object->getRefId()))
         {
             $this->tabs->addTab("properties", $this->txt("properties"), $ilCtrl->getLinkTarget($this, "editProperties"));
+            $this->tabs->addTab("members", $this->txt("members"), $ilCtrl->getLinkTarget($this, "MemberController.showOverview"));
             $this->tabs->addTab("export", $this->txt("export"), $ilCtrl->getLinkTargetByClass("ilexportgui", ""));
         }
 
@@ -232,6 +233,18 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $online = new ilCheckboxInputGUI($this->plugin->txt("online"), "online");
         $form->addItem($online);
 
+        $type = new ilSelectInputGUI($this->plugin->txt("doctype"), "docType");
+        $type->setOptions([
+            "" => "- ".$this->plugin->txt("placeholder-select")." -",
+            "pad" => 'Word',
+            "sheet" => "Calc",
+            "code" => "Code",
+        ]);
+        $form->addItem($type);
+
+        $docId = new ilTextInputGUI($this->plugin->txt("docId"), 'docId');
+        $form->addItem($docId);
+
         $form->setFormAction($this->ctrl->getFormAction($this, "saveProperties"));
         $form->addCommandButton("saveProperties", $this->plugin->txt("update"));
 
@@ -246,6 +259,9 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
             "title" => $this->object->getTitle(),
             "description" => $this->object->getDescription(),
             "online" => $this->object->isOnline(),
+            'docType' => $this->object->getDocType(),
+            'docId' => $this->object->getDocId(),
+
         ));
     }
 
@@ -304,6 +320,8 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $object->setTitle($form->getInput('title'));
         $object->setDescription($form->getInput('description'));
         $object->setOnline($form->getInput('online'));
+        $object->setDocType($form->getInput('docType'));
+        $object->setDocId($form->getInput('docId'));
     }
 
     protected function showExport() {

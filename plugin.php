@@ -2,7 +2,7 @@
 $id = "xcrp";
 
 // code version; must be changed for all code changes
-$version = "0.0.4";
+$version = "0.0.8";
 
 // ilias min and max version; must always reflect the versions that should
 // run with the plugin
@@ -13,7 +13,7 @@ $ilias_max_version = "6.999";
 $responsible = "Fabian Helfer";
 $responsible_mail = "fhelfer@databay.de";
 
-$supports_export = true;
+$supports_export = false;
 
 // Enable learning progress
 $learning_progress = true;

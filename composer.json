@@ -13,6 +13,7 @@
         }
     },
     "require": {
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-curl": "*"
     }
 }
