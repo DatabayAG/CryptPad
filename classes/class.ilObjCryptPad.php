@@ -45,7 +45,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
      */
     function doCreate()
     {
-        global $ilDB;
+        global $ilDB, $ilUser;
 
         $ilDB->manipulate("INSERT INTO rep_robj_xcrp_data ".
             "(id, is_online, doc_type, doc_write_id, doc_read_id) VALUES (".
@@ -53,6 +53,12 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
             $ilDB->quote(0, "integer").",".
             "null,null,null".
             ")");
+
+        $member = new \CryptPad\Model\Member();
+        $member->setUserId($ilUser->getId());
+        $member->setObjId((int)$this->getId());
+        $member->setRights("");
+        \CryptPad\Repository\MemberRepository::getInstance()->create($member);
     }
 
     /**

@@ -42,3 +42,4 @@ update_successful#:#Update successful
 doctype#:#Document Type
 docid#:#Document Link Id
 placeholder-select#:#Please select a document type
+request-join#:#Do you want to join the CryptPad Object?

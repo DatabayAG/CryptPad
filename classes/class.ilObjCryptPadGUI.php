@@ -1,6 +1,8 @@
 <?php
 
 use CryptPad\Utility\Dispatcher;
+use CryptPad\Table\MemberTable;
+use CryptPad\Repository\MemberRepository;
 
 include_once("./Services/Repository/classes/class.ilObjectPluginGUI.php");
 require_once("./Services/Form/classes/class.ilPropertyFormGUI.php");
@@ -133,13 +135,14 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
                         break;
                 }
                 $this->tpl->setContent($response);
-                if (version_compare(ILIAS_VERSION_NUMERIC, '6.0', '>=')) {
-                    $this->dic->ui()->mainTemplate()->printToStdOut();
-                } else {
-                    $this->dic->ui()->mainTemplate()->show();
-                }
+//                if (version_compare(ILIAS_VERSION_NUMERIC, '6.0', '>=')) {
+//                    $this->dic->ui()->mainTemplate()->printToStdOut();
+//                } else {
+//                    $this->dic->ui()->mainTemplate()->show();
+//                }
         }
     }
+
 
     /**
      * After object has been created -> jump to this command
@@ -181,6 +184,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         if ($ilAccess->checkAccess("write", "", $this->object->getRefId()))
         {
             $this->tabs->addTab("properties", $this->txt("properties"), $ilCtrl->getLinkTarget($this, "editProperties"));
+            $this->tabs->addTab("members", $this->txt("members"), $ilCtrl->getLinkTarget($this, "MemberController.showOverview"));
         }
 
         // standard permission tab

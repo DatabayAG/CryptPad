@@ -42,3 +42,5 @@ update_successful#:#Update erfolgreich.
 doctype#:#Dokument Typ
 docid#:#Id des Dokuments
 placeholder-select#:#Bitte wählen Sie einen Typ
+request-join#:#Wollen Sie dem CryptPad Objekt beitreten?
+placeholder-select-rights#:#Bitte auswählen.
