@@ -31,16 +31,13 @@ if (! $ilDB->tableExists('rep_robj_xcrp_data')) {
             'notnull' => false
         )
     );
-//if ($ilDB->tableExists('rep_robj_xcrp_data')) {
-//    $ilDB->dropTable('rep_robj_xcrp_data');
-//}
     $ilDB->createTable("rep_robj_xcrp_data", $fields);
     $ilDB->addPrimaryKey("rep_robj_xcrp_data", array("id"));
 }
 ?>
 <#2>
 <?php
-if (! $ilDB->tableExists('rep_robj_xcrp_data')) {
+if (! $ilDB->tableExists('rep_robj_xcrp_member')) {
     $fields = array(
         'id' => array(
             'type' => 'integer',
@@ -64,9 +61,6 @@ if (! $ilDB->tableExists('rep_robj_xcrp_data')) {
             'notnull' => false
         )
     );
-//if ($ilDB->tableExists('rep_robj_xcrp_member')) {
-//    $ilDB->dropTable('rep_robj_xcrp_member');
-//}
     $ilDB->createTable("rep_robj_xcrp_member", $fields);
     $ilDB->addPrimaryKey("rep_robj_xcrp_member", array("id"));
 }
