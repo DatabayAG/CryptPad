@@ -13,13 +13,6 @@ use ReflectionMethod;
  */
 abstract class RepositoryObject extends Base
 {
-    abstract public function getObjectGuiClass() : string;
-
-    abstract public function getObjectGuiConstructorParams() : array;
-
-    protected function beforeLocatorIsBuild() : void
-    {
-    }
 
     /**
      * @throws ReflectionException

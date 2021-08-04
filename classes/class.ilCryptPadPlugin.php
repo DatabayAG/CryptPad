@@ -20,6 +20,7 @@ class ilCryptPadPlugin extends ilRepositoryObjectPlugin
     private static $instance = null;
     /** @var bool */
     protected static $initialized = false;
+    private $server;
     /** @var \ILIAS\DI\Container */
     protected $dic;
 
@@ -52,6 +53,19 @@ class ilCryptPadPlugin extends ilRepositoryObjectPlugin
     function getPluginName()
     {
         return "CryptPad";
+    }
+
+    function setPluginServer($server) {
+        $res = file_get_contents(__DIR__ . "/../plugin.php");
+        if(str_contains($res, '$server')) {
+            preg_match('/server*;/', $res, $matches);
+            preg_replace("/$server*;/", "$server = 'test'", $res);
+            file_put_contents(__DIR__ . "/../plugin.php");
+        }
+        $this->server = $server;
+    }
+    function getPluginServer() {
+        return $this->server;
     }
 
     protected function uninstallCustom() {

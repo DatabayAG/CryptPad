@@ -184,7 +184,6 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         if ($ilAccess->checkAccess("write", "", $this->object->getRefId()))
         {
             $this->tabs->addTab("properties", $this->txt("properties"), $ilCtrl->getLinkTarget($this, "editProperties"));
-            $this->tabs->addTab("members", $this->txt("members"), $ilCtrl->getLinkTarget($this, "MemberController.showOverview"));
         }
 
         // standard permission tab
@@ -235,20 +234,8 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $online = new ilCheckboxInputGUI($this->plugin->txt("online"), "online");
         $form->addItem($online);
 
-        $type = new ilSelectInputGUI($this->plugin->txt("doctype"), "docType");
-        $type->setOptions([
-            "" => "- ".$this->plugin->txt("placeholder-select")." -",
-            "pad" => 'Word',
-            "sheet" => "Calc",
-            "code" => "Code",
-        ]);
-        $form->addItem($type);
-
-        $docWriteId = new ilTextInputGUI($this->plugin->txt("docWriteId"), 'docWriteId');
-        $form->addItem($docWriteId);
-
-        $docReadId = new ilTextInputGUI($this->plugin->txt("docReadId"), 'docReadId');
-        $form->addItem($docReadId);
+        $docLink = new ilTextInputGUI($this->plugin->txt("docLink"), 'docLink');
+        $form->addItem($docLink);
 
         $form->setFormAction($this->ctrl->getFormAction($this, "saveProperties"));
         $form->addCommandButton("saveProperties", $this->plugin->txt("update"));
@@ -264,13 +251,10 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
             "title" => $this->object->getTitle(),
             "description" => $this->object->getDescription(),
             "online" => $this->object->isOnline(),
-            'docType' => $this->object->getDocType(),
-            'docWriteId' => $this->object->getDocWriteId(),
-            'docReadId' => $this->object->getDocReadId(),
+            'docLink' => $this->object->getDocLink(),
 
         ));
     }
-//y8RdQaJPCbN6nG37civ5RZRK || k3s+ZKXa5A2oK0mxENkCgTKk
     /**
      *
      */
@@ -326,9 +310,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $object->setTitle($form->getInput('title'));
         $object->setDescription($form->getInput('description'));
         $object->setOnline($form->getInput('online'));
-        $object->setDocType($form->getInput('docType'));
-        $object->setDocWriteId($form->getInput('docWriteId'));
-        $object->setDocReadId($form->getInput('docReadId'));
+        $object->setDocLink($form->getInput('docLink'));
     }
 
     protected function showExport() {

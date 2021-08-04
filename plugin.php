@@ -2,7 +2,7 @@
 $id = "xcrp";
 
 // code version; must be changed for all code changes
-$version = "0.3.1";
+$version = "0.4.1";
 
 // ilias min and max version; must always reflect the versions that should
 // run with the plugin
@@ -17,4 +17,6 @@ $supports_export = false;
 
 // Enable learning progress
 $learning_progress = true;
+
+$server = 'localhost:3000';
 ?>

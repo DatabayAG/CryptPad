@@ -11,15 +11,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * @var ?string
      */
-    protected $docType;
-    /**
-     * @var ?string
-     */
-    protected $docWriteId;
-    /**
-     * @var ?string
-     */
-    protected $docReadId;
+    protected $docLink;
 
     /**
      * Constructor
@@ -48,17 +40,11 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
         global $ilDB, $ilUser;
 
         $ilDB->manipulate("INSERT INTO rep_robj_xcrp_data ".
-            "(id, is_online, doc_type, doc_write_id, doc_read_id) VALUES (".
+            "(id, is_online, doc_link) VALUES (".
             $ilDB->quote($this->getId(), "integer").",".
             $ilDB->quote(0, "integer").",".
-            "null,null,null".
+            "null".
             ")");
-
-        $member = new \CryptPad\Model\Member();
-        $member->setUserId($ilUser->getId());
-        $member->setObjId((int)$this->getId());
-        $member->setRights("");
-        \CryptPad\Repository\MemberRepository::getInstance()->create($member);
     }
 
     /**
@@ -74,10 +60,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
         while ($rec = $ilDB->fetchAssoc($set))
         {
             $this->setOnline($rec["is_online"]);
-            $this->setDocType($rec['doc_type']);
-            $this->setDocWriteId($rec['doc_write_id']);
-            $this->setDocReadId($rec['doc_read_id']);
-
+            $this->setDocLink($rec['doc_link']);
         }
     }
 
@@ -90,9 +73,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
 
         $ilDB->manipulate($up = "UPDATE rep_robj_xcrp_data SET ".
             " is_online = ".$ilDB->quote($this->isOnline(), "integer").", ".
-            " doc_type = ".$ilDB->quote($this->getDocType(), "text").", ".
-            " doc_write_id = ".$ilDB->quote($this->getDocWriteId(), "text").", ".
-            " doc_read_id = ".$ilDB->quote($this->getDocReadId(), "text")." ".
+            " doc_link = ".$ilDB->quote($this->getDocLink(), "text")." ".
             " WHERE id = ".$ilDB->quote($this->getId(), "integer")
         );
     }
@@ -117,9 +98,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
         global $ilDB;
 
         $new_obj->setOnline($this->isOnline());
-        $new_obj->setDocType($this->getDocType());
-        $new_obj->setDocWriteId($this->getDocWriteId());
-        $new_obj->setDocReadId($this->getDocReadId());
+        $new_obj->setDocLink($this->getDocLink());
         $new_obj->update();
     }
 
@@ -143,23 +122,6 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     {
         return $this->online;
     }
-
-    /**
-     * @return string|null
-     */
-    public function getDocType() : ?string
-    {
-        return $this->docType;
-    }
-
-    /**
-     * @param ?string $docType
-     */
-    public function setDocType(?string $docType) : void
-    {
-        $this->docType = $docType;
-    }
-
 
 
     /**
@@ -215,33 +177,17 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * @return string|null
      */
-    public function getDocWriteId() : ?string
+    public function getDocLink() : ?string
     {
-        return $this->docWriteId;
+        return $this->docLink;
     }
 
     /**
-     * @param string|null $docWriteId
+     * @param string|null $docLink
      */
-    public function setDocWriteId(?string $docWriteId) : void
+    public function setDocLink(?string $docLink) : void
     {
-        $this->docWriteId = $docWriteId;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getDocReadId() : ?string
-    {
-        return $this->docReadId;
-    }
-
-    /**
-     * @param string|null $docReadId
-     */
-    public function setDocReadId(?string $docReadId) : void
-    {
-        $this->docReadId = $docReadId;
+        $this->docLink = $docLink;
     }
 }
 ?>

@@ -12,21 +12,9 @@ if (! $ilDB->tableExists('rep_robj_xcrp_data')) {
             'length' => 1,
             'notnull' => false
         ),
-        'doc_type' => array(
+        'doc_link' => array(
             'type' => 'text',
-            'length' => 10,
-            'fixed' => false,
-            'notnull' => false
-        ),
-        'doc_write_id' => array(
-            'type' => 'text',
-            'length' => 127,
-            'fixed' => false,
-            'notnull' => false
-        ),
-        'doc_read_id' => array(
-            'type' => 'text',
-            'length' => 127,
+            'length' => 255,
             'fixed' => false,
             'notnull' => false
         )
@@ -37,35 +25,31 @@ if (! $ilDB->tableExists('rep_robj_xcrp_data')) {
 ?>
 <#2>
 <?php
-if (! $ilDB->tableExists('rep_robj_xcrp_member')) {
+if (! $ilDB->tableExists('rep_robj_xcrp_const')) {
     $fields = array(
         'id' => array(
             'type' => 'integer',
             'length' => 4,
             'notnull' => true
         ),
-        'obj_id' => array(
-            'type' => 'integer',
-            'length' => 4,
-            'notnull' => false
-        ),
-        'user_id' => array(
-            'type' => 'integer',
-            'length' => 4,
-            'notnull' => false
-        ),
-        'rights' => array(
+        'name' => array(
             'type' => 'text',
             'length' => 10,
             'fixed' => false,
             'notnull' => false
+        ),
+        'value' => array(
+            'type' => 'text',
+            'length' => 255,
+            'fixed' => false,
+            'notnull' => false
         )
     );
-    $ilDB->createTable("rep_robj_xcrp_member", $fields);
-    $ilDB->addPrimaryKey("rep_robj_xcrp_member", array("id"));
+    $ilDB->createTable("rep_robj_xcrp_const", $fields);
+    $ilDB->addPrimaryKey("rep_robj_xcrp_const", array("id"));
 }
-if ($ilDB->tableExists('rep_robj_xcrp_member') && !$ilDB->sequenceExists('rep_robj_xcrp_member')) {
-    $ilDB->createSequence('rep_robj_xcrp_member');
+if ($ilDB->tableExists('rep_robj_xcrp_const') && !$ilDB->sequenceExists('rep_robj_xcrp_const')) {
+    $ilDB->createSequence('rep_robj_xcrp_const');
 }
-?>
 
+?>

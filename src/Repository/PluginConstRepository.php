@@ -1,23 +1,29 @@
 <?php
 
 declare(strict_types=1);
-/* Copyright (c) 1998-2021 ILIAS open source, Extended GPL, see docs/LICENSE */
 
 namespace CryptPad\Repository;
 
 use ilDBInterface;
-use CryptPad\Model\Member;
+use CryptPad\Model\PluginConst;
 use ilPDOStatement;
 
+/** TODO: replace:
+ *   PluginConst => Name of Model Class
+ *   rep_robj_xcrp_const => Table Name
+ *   pluginConst => var of model
+ *   CryptPad => namespace plugin
+ *
+ * */
 /**
- * Class MemberRepository
+ * Class PluginConstRepository
  * @author Fabian Helfer <fhelfer@databay.de>
  *
  */
-class MemberRepository
+class PluginConstRepository
 {
     /**
-     * @var MemberRepository
+     * @var PluginConstRepository
      */
     private static $instance;
     /**
@@ -28,20 +34,20 @@ class MemberRepository
     /**
      * @var string
      */
-    private $tablename = 'rep_robj_xcrp_member';
+    private $tablename = 'rep_robj_xcrp_const';
 
+    // TODO: fields
     /**
      * @var array
      */
     private $fields = [
         'id'               => ['integer', 'int'],
-        'obj_id'           => ['integer', 'int'],
-        'user_id'           => ['integer', 'int'],
-        'rights'           => ['text'],
+        'name'           => ['text'],
+        'value'           => ['text'],
     ];
 
     /**
-     * MemberRepository constructor.
+     * PluginConstRepository constructor.
      * @param ilDBInterface|null $db
      */
     public function __construct(ilDBInterface $db = null)
@@ -70,49 +76,50 @@ class MemberRepository
     }
 
     /**
-     * Creates a new row in the Member database table.
-     * @param Member $member
-     * @return Member
+     * Creates a new row in the PluginConst database table.
+     * @param PluginConst $pluginConst
+     * @return PluginConst
      */
-    public function create(Member $member) : Member
+    // TODO: model attributes
+    public function create(PluginConst $pluginConst) : PluginConst
     {
 
-        if (empty($member->getId())) {
-            $member->setId(((int) $this->db->nextId($this->tablename)));
+        if (empty($pluginConst->getId())) {
+            $pluginConst->setId(((int)$this->db->nextId($this->tablename)));
         }
         $this->db->manipulateF(
-            'INSERT INTO ' . $this->tablename . ' (id, obj_id, user_id, rights) VALUES ' .
-            '(%s, %s, %s, %s)',
-            ['integer', 'integer', 'integer', 'text'],
+            'INSERT INTO ' . $this->tablename . ' (id, name, value) VALUES ' .
+            '(%s, %s, %s)',
+            ['integer', 'text', 'text'],
             [
-                $member->getId(),
-                $member->getObjId(),
-                $member->getUserId(),
-                $member->getRights(),
+                $pluginConst->getId(),
+                $pluginConst->getName(),
+                $pluginConst->getValue(),
             ]
         );
 
-        return $member;
+        return $pluginConst;
     }
 
     /**
-     * Finds a Member by [attr => value] tupel
+     * Finds a PluginConst by [attr => value] tupel
      * @param $attr
      * @param $value
      * @return array
      */
     public function readBy($attr, $value) : array
     {
-        $result = $this->db->query('SELECT * FROM ' . $this->tablename . " WHERE {$attr} = {$value}");
+        $result = $this->db->query('SELECT * FROM ' . $this->tablename . " WHERE {$attr} = "
+        . $this->db->quote($value , "string"));
 
         return $this->readQuery($result);
     }
 
     /**
-     * Finds a Member by multiple [attr => value] tupel in array
+     * Finds a PluginConst by multiple [attr => value] tupel in array
      * Returns all results
      * @param array $attrArray
-     * @return Member[]
+     * @return array
      */
     public function readByAttributes(array $attrArray) : array
     {
@@ -127,8 +134,8 @@ class MemberRepository
     }
 
     /**
-     * Reads all rows from the Member database table.
-     * @return Member[]
+     * Reads all rows from the PluginConst database table.
+     * @return PluginConst[]
      */
     public function readAll() : array
     {
@@ -138,31 +145,32 @@ class MemberRepository
     }
 
     /**
-     * Finds a Member from the Database
+     * Finds a PluginConst from the Database
      * @param int $id
-     * @return Member
+     * @return PluginConst
      */
-    public function read(int $id) : ?Member
+    public function read(int $id) : PluginConst
     {
         $result = $this->db->query('SELECT * FROM ' . $this->tablename . " WHERE id = {$id}");
 
         return $this->readQuery($result)[0];
     }
 
+    // TODO: model attributes
+
     /**
      * Executes Query and returns result in array
      * @param ilPDOStatement $query
-     * @return Member[]
+     * @return PluginConst[]
      */
     public function readQuery(ilPDOStatement $query) : array
     {
         $data = $this->db->fetchAll($query);
         foreach ($data as $key => $value) {
-            $data[$key] = new Member();
+            $data[$key] = new PluginConst();
             $data[$key]->setId((int) $value['id']);
-            $data[$key]->setObjId((int) $value['obj_id']);
-            $data[$key]->setUserId((int) $value['user_id']);
-            $data[$key]->setRights($value['rights']);
+            $data[$key]->setName($value['name']);
+            $data[$key]->setValue($value['value']);
         }
 
         return $data;
@@ -188,7 +196,20 @@ class MemberRepository
     }
 
     /**
-     * Removes a Member from the Database
+     * @param PluginConst $pluginConst
+     */
+    public function updateOrCreate(PluginConst $pluginConst)
+    {
+        $pluginConstGet = $this->readBy("name", $pluginConst->getName())[0];
+        if($pluginConstGet) {
+            self::getInstance()->update($pluginConstGet->getId(), ['value' => $pluginConst->getValue()]);
+        } else {
+            self::getInstance()->create($pluginConst);
+        }
+    }
+
+    /**
+     * Removes a PluginConst from the Database
      * @param int $id
      */
     public function delete(int $id) : void
