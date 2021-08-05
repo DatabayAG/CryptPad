@@ -15,6 +15,8 @@ require_once("./Customizing/global/plugins/Services/Repository/RepositoryObject/
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
+ * class ilObjCryptPadGUI
+ * @author Fabian Helfer <fhelfer@databay.de>
  * @ilCtrl_isCalledBy ilObjCryptPadGUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI
  * @ilCtrl_Calls ilObjCryptPadGUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilCommonActionDispatcherGUI, ilExportGUI
  */
@@ -51,7 +53,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * @param ilCryptPadPlugin $a_val
      */
-    final public function setPluginObject($a_val)
+    final public function setPluginObject($a_val) : void
     {
         $this->plugin_object = $a_val;
     }
@@ -60,7 +62,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * @return ilCryptPadPlugin
      */
-    final public function getPluginObject()
+    final public function getPluginObject() : ilCryptPadPlugin
     {
         return $this->plugin_object;
     }
@@ -96,7 +98,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * Get type.
      */
-    final function getType()
+    final public function getType() : string
     {
         return ilCryptPadPlugin::ID;
     }
@@ -104,7 +106,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * Handles all commmands of this class, centralizes permission checks
      */
-    function performCommand($cmd)
+    public function performCommand($cmd) : void
     {
         switch ($cmd) {
             case "editProperties":   // list all commands that need write permission here
@@ -147,7 +149,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * After object has been created -> jump to this command
      */
-    function getAfterCreationCmd()
+    public function getAfterCreationCmd() : string
     {
         return "editProperties";
     }
@@ -155,7 +157,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * Get standard command
      */
-    function getStandardCmd()
+    public function getStandardCmd() : string
     {
         return "showContent";
     }
@@ -167,7 +169,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * Set tabs
      */
-    function setTabs()
+    public function setTabs(): void
     {
         global $ilCtrl, $ilAccess;
 
@@ -194,7 +196,8 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * We need this method if we can't access the tabs otherwise...
      */
-    private function activateTab() {
+    private function activateTab() : void
+    {
         $next_class = $this->ctrl->getCmdClass();
 
         switch($next_class) {
@@ -209,7 +212,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * Edit Properties. This commands uses the form class to display an input form.
      */
-    protected function editProperties()
+    protected function editProperties() : void
     {
         $this->tabs->activateTab("properties");
         $form = $this->initPropertiesForm();
@@ -220,7 +223,8 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * @return ilPropertyFormGUI
      */
-    protected function initPropertiesForm() {
+    protected function initPropertiesForm() : ilPropertyFormGUI
+    {
         $form = new ilPropertyFormGUI();
         $form->setTitle($this->plugin->txt("obj_xcrp"));
 
@@ -234,7 +238,9 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $online = new ilCheckboxInputGUI($this->plugin->txt("online"), "online");
         $form->addItem($online);
 
+
         $docLink = new ilTextInputGUI($this->plugin->txt("docLink"), 'docLink');
+        $docLink->setInfo($this->plugin->txt("explanation-doc-link") . '<br>' . $this->plugin->txt("info-doc-link"));
         $form->addItem($docLink);
 
         $form->setFormAction($this->ctrl->getFormAction($this, "saveProperties"));
@@ -246,7 +252,8 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * @param $form ilPropertyFormGUI
      */
-    protected function addValuesToForm(&$form) {
+    protected function addValuesToForm(&$form) : void
+    {
         $form->setValuesByArray(array(
             "title" => $this->object->getTitle(),
             "description" => $this->object->getDescription(),
@@ -258,7 +265,8 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      *
      */
-    protected function saveProperties() {
+    protected function saveProperties() : void
+    {
         $form = $this->initPropertiesForm();
         $form->setValuesByPost();
         if($form->checkInput()) {
@@ -270,7 +278,8 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $this->tpl->setContent($form->getHTML());
     }
 
-    protected function showContent() {
+    protected function showContent() : void
+    {
         $this->tabs->activateTab("content");
         /** @var ilTemplate $template */
         $template = $this->plugin->getTemplate("tpl.content.html");
@@ -306,14 +315,16 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
      * @param $object ilObjCryptPad
      * @param $form ilPropertyFormGUI
      */
-    private function fillObject($object, $form) {
+    private function fillObject(ilObjCryptPad $object, ilPropertyFormGUI $form) : void
+    {
         $object->setTitle($form->getInput('title'));
         $object->setDescription($form->getInput('description'));
         $object->setOnline($form->getInput('online'));
         $object->setDocLink($form->getInput('docLink'));
     }
 
-    protected function showExport() {
+    protected function showExport() : void
+    {
         require_once("./Services/Export/classes/class.ilExportGUI.php");
         $export = new ilExportGUI($this);
         $export->addFormat("xml");
@@ -322,26 +333,31 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     }
 
 
-    private function setStatusToCompleted() {
+    private function setStatusToCompleted() : void
+    {
         $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_COMPLETED_NUM);
     }
 
-    private function setStatusAndRedirect($status) {
+    private function setStatusAndRedirect($status) : void
+    {
         global $ilUser;
         $_SESSION[self::LP_SESSION_ID] = $status;
         ilLPStatusWrapper::_updateStatus($this->object->getId(), $ilUser->getId());
         $this->ctrl->redirect($this, $this->getStandardCmd());
     }
 
-    protected function setStatusToFailed() {
+    protected function setStatusToFailed() : void
+    {
         $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_FAILED_NUM);
     }
 
-    protected function setStatusToInProgress() {
+    protected function setStatusToInProgress() : void
+    {
         $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_IN_PROGRESS_NUM);
     }
 
-    protected function setStatusToNotAttempted() {
+    protected function setStatusToNotAttempted() : void
+    {
         $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM);
     }
 

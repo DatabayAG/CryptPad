@@ -50,25 +50,13 @@ class ilCryptPadPlugin extends ilRepositoryObjectPlugin
     }
 
     // must correspond to the plugin subdirectory
-    function getPluginName()
+    function getPluginName() : string
     {
         return "CryptPad";
     }
 
-    function setPluginServer($server) {
-        $res = file_get_contents(__DIR__ . "/../plugin.php");
-        if(str_contains($res, '$server')) {
-            preg_match('/server*;/', $res, $matches);
-            preg_replace("/$server*;/", "$server = 'test'", $res);
-            file_put_contents(__DIR__ . "/../plugin.php");
-        }
-        $this->server = $server;
-    }
-    function getPluginServer() {
-        return $this->server;
-    }
-
-    protected function uninstallCustom() {
+    protected function uninstallCustom(): void
+    {
         // TODO: Nothing to do here.
     }
 
@@ -83,16 +71,12 @@ class ilCryptPadPlugin extends ilRepositoryObjectPlugin
 
     public static function getInstance() : self
     {
-        if (null === self::$instance) {
-            return self::$instance = ilPluginAdmin::getPluginObject(
+        return self::$instance ?? (self::$instance = ilPluginAdmin::getPluginObject(
                 self::CTYPE,
                 self::CNAME,
                 self::SLOT_ID,
                 self::PNAME
-            );
-        }
-
-        return self::$instance;
+            ));
     }
 
     public function isAtLeastIlias6() : bool

@@ -15,14 +15,15 @@ class ilObjCryptPadListGUI extends ilObjectPluginListGUI
     /**
      * Init type
      */
-    function initType() {
+    public function initType(): void
+    {
         $this->setType(ilCryptPadPlugin::ID);
     }
 
     /**
      * Get name of gui class handling the commands
      */
-    function getGuiClass()
+    public function getGuiClass() : string
     {
         return "ilObjCryptPadGUI";
     }
@@ -30,7 +31,7 @@ class ilObjCryptPadListGUI extends ilObjectPluginListGUI
     /**
      * Get commands
      */
-    function initCommands()
+    public function initCommands() : array
     {
         return array
         (
@@ -54,7 +55,7 @@ class ilObjCryptPadListGUI extends ilObjectPluginListGUI
      *                                "property" (string) => property name
      *                                "value" (string) => property value
      */
-    function getProperties()
+    public function getProperties() : array
     {
         global $lng, $ilUser;
 
@@ -70,4 +71,3 @@ class ilObjCryptPadListGUI extends ilObjectPluginListGUI
         return $props;
     }
 }
-?>

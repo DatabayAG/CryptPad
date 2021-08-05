@@ -2,27 +2,15 @@
 
 declare(strict_types=1);
 
-use CourseAutomation\EnumTypes\ObjectStateType;
-use CourseAutomation\EnumTypes\StateType;
-use CourseAutomation\Form\ConfirmationDialog;
-use CourseAutomation\Form\UploadImportJobForm;
-use CourseAutomation\HelperClasses\CSV;
-use CourseAutomation\Model\ImportJob;
-use CourseAutomation\Repository\ImportJobRepository;
-use CourseAutomation\Repository\JobObjectRepository;
-use CourseAutomation\Services\CSVImportService;
-use CourseAutomation\Services\ImportTableService;
-use CourseAutomation\Services\StateUpdateService;
-use CourseAutomation\Table\CourseAutomationTable;
-use CourseAutomation\Table\ObjectDetailsTable;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-/**
+/** class ilCryptPadConfigGUI
  * @ilCtrl_Calls ilCryptPadConfigGUI: lPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilCommonActionDispatcherGUI, ilObjGroupGUI
- * */
+ * @author Fabian Helfer <fhelfer@databay.de>
+ */
 class ilCryptPadConfigGUI extends ilPluginConfigGUI
 {
     /**
@@ -43,10 +31,19 @@ class ilCryptPadConfigGUI extends ilPluginConfigGUI
      */
     private $request;
 
+    /**
+     * @var ilObjUser
+     */
     protected $user;
 
+    /**
+     * @var ilLogger
+     */
     protected $ilLog;
 
+    /**
+     * ilCryptPadConfigGUI constructor.
+     */
     public function __construct()
     {
         global $DIC;
@@ -55,11 +52,20 @@ class ilCryptPadConfigGUI extends ilPluginConfigGUI
         $this->user = $DIC->user();
         $this->ilLog = $DIC->logger()->root();
         $this->request = $DIC->http()->request();
-        $this->plugin = ilCryptPadPlugin::getInstance();
     }
 
-    public function performCommand($cmd)
+    /**
+     * @param $cmd
+     */
+    public function performCommand($cmd): void
     {
+        try {
+            $this->plugin = ilCryptPadPlugin::getInstance();
+            $this->plugin->registerAutoloader();
+        } catch (Throwable $e) {
+            ilUtil::sendFailure("Plugin has to be activated first");
+            return;
+        }
         switch (true) {
             case method_exists($this, $cmd):
                 $this->{$cmd}();
@@ -70,12 +76,12 @@ class ilCryptPadConfigGUI extends ilPluginConfigGUI
     }
 
 
-    public function showConfigurationGui()
+    public function showConfigurationGui() : void
     {
         $form = new ilPropertyFormGUI();
-        $form->setTitle($this->plugin->txt("Configuration"));
+        $form->setTitle($this->plugin_object->txt("Configuration"));
 
-        $text = new ilTextInputGUI($this->plugin->txt("server-address"),"server");
+        $text = new ilTextInputGUI($this->plugin_object->txt("server-address"),"server");
         $val = \CryptPad\Repository\PluginConstRepository::getInstance()->readBy('name', "server")[0];
         $val = $val ? $val->getValue() : "";
         $text->setValue($val);
@@ -87,7 +93,8 @@ class ilCryptPadConfigGUI extends ilPluginConfigGUI
         $this->tpl->setContent($form->getHTML());
     }
 
-    public function saveProperties() {
+    public function saveProperties() : void
+    {
         $server = $this->request->getParsedBody()["server"];
         $pluginConst = new \CryptPad\Model\PluginConst();
         $pluginConst->setName("server");
@@ -96,7 +103,7 @@ class ilCryptPadConfigGUI extends ilPluginConfigGUI
         $this->showConfigurationGui();
     }
 
-    private function getDefaultCommand()
+    private function getDefaultCommand() : string
     {
         return 'showConfigurationGui';
     }

@@ -6,7 +6,6 @@ declare(strict_types=1);
 namespace CryptPad\Utility;
 
 use ilCtrl;
-use ilExAssignment;
 use ilObject;
 use ilObjectDataCache;
 use ilObjectFactory;

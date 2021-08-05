@@ -43,3 +43,8 @@ doctype#:#Document Type
 docid#:#Document Link Id
 placeholder-select#:#Please select a document type
 request-join#:#Do you want to join the CryptPad Object?
+server-address#:#Server Address
+Configuration#:#Configuration
+docLink#:#Link to the Document
+info-doc-link#:#e.g. http://www.example.com/pad/#/2/pad/edit/oXKoGujRYhYgHnX+qDF4Fec5/
+explanation-doc-link#:#Click share in the Document and copy the given link

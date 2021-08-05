@@ -5,26 +5,6 @@ declare(strict_types=1);
 
 namespace CryptPad\Controller;
 
-use ilExerciseHandlerGUI;
-use ilObjectFactory;
-use ilObjExercise;
-use ilObjExerciseGUI;
-use ilUtil;
-use ilPropertyFormGUI;
-use ilTextInputGUI;
-use ilCheckboxInputGUI;
-use DOMDocument;
-use ilTemplate;
-use ilObjCryptPad;
-use ilLPStatusPlugin;
-use ilExportGUI;
-use ilLPStatus;
-use ilLPStatusWrapper;
-use CryptPad\Services\CryptPadService;
-use CryptPad\Repository\MemberRepository;
-use ilConfirmationGUI;
-use CryptPad\Model\Member;
-use CryptPad\Model\PluginConst;
 use CryptPad\Repository\PluginConstRepository;
 
 /**
@@ -32,9 +12,9 @@ use CryptPad\Repository\PluginConstRepository;
  *
  * @ilCtrl_isCalledBy: Cryptpad\Controller\DefaultController: ilObjPluginDispatchGUI, ilObjCryptPadGUI
  *
- * @author  Timo Müller <timomueller@databay.de>
+ * @author Fabian Helfer <fhelfer@databay.de>
  */
-class DefaultController extends RepositoryObject
+class DefaultController extends Base
 {
     /**
      * @ineritdoc
@@ -45,7 +25,8 @@ class DefaultController extends RepositoryObject
         $this->ctrl->saveParameter($this->getCoreController(), 'ref_id');
     }
 
-    public function showContentCmd() {
+    public function showContentCmd() : string
+    {
 
         $this->getCoreController()->tabs->activateTab("content");
         $link = $this->getCoreController()->object->getDocLink();

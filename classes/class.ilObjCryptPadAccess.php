@@ -4,17 +4,15 @@ include_once("./Services/Repository/classes/class.ilObjectPluginAccess.php");
 /**
  * Access/Condition checking for Example object
  *
- * Please do not create instances of large application classes (like ilObjExample)
- * Write small methods within this class to determine the status.
- *
- * @author 		Alex Killing <alex.killing@gmx.de>
+ * class ilObjCryptPadAccess
+ * @author Fabian Helfer <fhelfer@databay.de>
  * @version $Id$
  */
 class ilObjCryptPadAccess extends ilObjectPluginAccess
 {
 
     /**
-     * Checks wether a user may invoke a command or not
+     * Checks whether a user may invoke a command or not
      * (this method is called by ilAccessHandler::checkAccess)
      *
      * Please do not check any preconditions handled by
@@ -28,7 +26,7 @@ class ilObjCryptPadAccess extends ilObjectPluginAccess
      *
      * @return	boolean		true, if everything is ok
      */
-    function _checkAccess($a_cmd, $a_permission, $a_ref_id, $a_obj_id, $a_user_id = "")
+    public function _checkAccess($a_cmd, $a_permission, $a_ref_id, $a_obj_id, $a_user_id = "") : bool
     {
         global $ilUser, $ilAccess;
 
@@ -54,7 +52,7 @@ class ilObjCryptPadAccess extends ilObjectPluginAccess
     /**
      * Check online status of example object
      */
-    static function checkOnline($a_id)
+    public static function checkOnline($a_id) : bool
     {
         global $ilDB;
 

@@ -5,6 +5,8 @@ require_once("./Services/Tracking/interfaces/interface.ilLPStatusPlugin.php");
 require_once("./Customizing/global/plugins/Services/Repository/RepositoryObject/CryptPad/classes/class.ilObjCryptPadGUI.php");
 
 /**
+ * class ilObjCryptPad
+ * @author Fabian Helfer <fhelfer@databay.de>
  */
 class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
 {
@@ -19,7 +21,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
      * @access        public
      * @param int $a_ref_id
      */
-    function __construct($a_ref_id = 0)
+    public function __construct($a_ref_id = 0)
     {
         parent::__construct($a_ref_id);
     }
@@ -27,7 +29,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * Get type.
      */
-    final function initType()
+    final public function initType() : void
     {
         $this->setType(ilCryptPadPlugin::ID);
     }
@@ -35,7 +37,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * Create object
      */
-    function doCreate()
+    public function doCreate(): void
     {
         global $ilDB, $ilUser;
 
@@ -50,7 +52,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * Read data from db
      */
-    function doRead()
+    public function doRead(): void
     {
         global $ilDB;
 
@@ -67,7 +69,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * Update data
      */
-    function doUpdate()
+    public function doUpdate(): void
     {
         global $ilDB;
 
@@ -81,7 +83,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * Delete data from db
      */
-    function doDelete()
+    public function doDelete(): void
     {
         global $ilDB;
 
@@ -93,7 +95,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * Do Cloning
      */
-    function doClone($a_target_id,$a_copy_id,$new_obj)
+    public function doClone($a_target_id,$a_copy_id,$new_obj) : void
     {
         global $ilDB;
 
@@ -108,7 +110,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
      *
      * @param        boolean                online
      */
-    function setOnline($a_val)
+    public function setOnline($a_val) : void
     {
         $this->online = $a_val;
     }
@@ -118,7 +120,7 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
      *
      * @return        boolean                online
      */
-    function isOnline()
+    public function isOnline() : bool
     {
         return $this->online;
     }
@@ -129,7 +131,8 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
      *
      * @return array
      */
-    public function getLPCompleted() {
+    public function getLPCompleted() : array
+    {
         return array();
     }
 
@@ -138,7 +141,8 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
      *
      * @return array
      */
-    public function getLPNotAttempted() {
+    public function getLPNotAttempted() : array
+    {
         return array();
     }
 
@@ -147,7 +151,8 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
      *
      * @return array
      */
-    public function getLPFailed() {
+    public function getLPFailed() : array
+    {
         return array(6);
     }
 
@@ -156,7 +161,8 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
      *
      * @return array
      */
-    public function getLPInProgress() {
+    public function getLPInProgress() : array
+    {
         return array();
     }
 
@@ -166,7 +172,8 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
      * @param int $a_user_id
      * @return int
      */
-    public function getLPStatusForUser($a_user_id) {
+    public function getLPStatusForUser($a_user_id) : int
+    {
         global $ilUser;
         if($ilUser->getId() == $a_user_id)
             return $_SESSION[ilObjCryptPadGUI::LP_SESSION_ID];
