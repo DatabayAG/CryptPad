@@ -49,3 +49,5 @@ Configuration#:#Konfiguration
 docLink#:#Link Addresse des Dokuments
 info-doc-link#:#z.B. http://www.example.com/pad/#/2/pad/edit/oXKoGujRYhYgHnX+qDF4Fec5/
 explanation-doc-link#:#Im Dokument auf teilen klicken und Link kopieren
+height#:#Höhe des CryptPad Fensters
+width#:#Breite des CryptPad Fensters

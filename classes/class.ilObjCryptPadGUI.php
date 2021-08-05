@@ -3,6 +3,7 @@
 use CryptPad\Utility\Dispatcher;
 use CryptPad\Table\MemberTable;
 use CryptPad\Repository\MemberRepository;
+use CryptPad\Repository\PluginConstRepository;
 
 include_once("./Services/Repository/classes/class.ilObjectPluginGUI.php");
 require_once("./Services/Form/classes/class.ilPropertyFormGUI.php");
@@ -69,28 +70,6 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
 
     public function executeCommand()
     {
-        global $tpl;
-
-
-        $next_class = $this->ctrl->getNextClass($this);
-        switch ($next_class) {
-            case 'ilexportgui':
-                // only if plugin supports it?
-                $tpl->setTitle($this->object->getTitle());
-                $tpl->setTitleIcon(ilObject::_getIcon($this->object->getId()));
-                $this->setLocator();
-                $tpl->getStandardTemplate();
-                $this->setTabs();
-                include_once './Services/Export/classes/class.ilExportGUI.php';
-                $this->tabs->activateTab("export");
-                $exp = new ilExportGUI($this);
-                $exp->addFormat('xml');
-                $this->ctrl->forwardCommand($exp);
-                $tpl->show();
-                return;
-                break;
-        }
-
         return parent::executeCommand();
     }
 
@@ -111,38 +90,42 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
             case "editProperties":   // list all commands that need write permission here
             case "updateProperties":
             case "saveProperties":
-            case "showExport":
                 $this->checkPermission("write");
                 $this->$cmd();
                 break;
-            case "setStatusToCompleted":
-            case "setStatusToFailed":
-            case "setStatusToInProgress":
-            case "setStatusToNotAttempted":
+            case "showContent":
                 $this->checkPermission("read");
                 $this->$cmd();
-                break;
-            case "showContent":
-                $cmd = 'DefaultController' . $cmd;
-                // no break
-            default:
-                $this->setPluginObject(ilCryptPadPlugin::getInstance());
-                $nextClass = $this->dic->ctrl()->getNextClass();
-                switch (strtolower($nextClass)) {
-                    default:
-                        $dispatcher = Dispatcher::getInstance($this);
-                        $dispatcher->setDic($this->dic);
 
-                        $response = $dispatcher->dispatch($this->dic->ctrl()->getCmd());
-                        break;
-                }
-                $this->tpl->setContent($response);
-//                if (version_compare(ILIAS_VERSION_NUMERIC, '6.0', '>=')) {
-//                    $this->dic->ui()->mainTemplate()->printToStdOut();
-//                } else {
-//                    $this->dic->ui()->mainTemplate()->show();
-//                }
         }
+    }
+
+    public function showContent() : void
+    {
+        $this->tabs->activateTab("content");
+        $link = $this->object->getDocLink();
+        if (!$link) {
+            $server = PluginConstRepository::getInstance()->readBy("name", "server")[0];
+            if ($server) {
+                $link = $server->getValue();
+            } else {
+                $this->tpl->setContent($this->getPluginObject()->txt("server-missing"));
+            }
+        }
+
+        $width = PluginConstRepository::getInstance()->readBy("name", "width")[0];
+        $height = PluginConstRepository::getInstance()->readBy("name", "height")[0];
+        $width = $width && $width->getValue() !== "" ? $width->getValue(): '1450';
+        $height = $height && $height->getValue() !== "" ? $height->getValue(): '600';
+
+        $template = new ilTemplate('./Customizing/global/plugins/Services/Repository/RepositoryObject/CryptPad/templates/tpl.il_xcrp_cryptpad_iframe.html', true, true);
+        $template->setCurrentBlock("default");
+        $template->setVariable("VAL_URL", $link);
+        $template->setVariable("VAL_WIDTH", $width);
+        $template->setVariable("VAL_HEIGHT", $height);
+        $template->parseCurrentBlock();
+
+        $this->tpl->setContent($template->get());
     }
 
 
@@ -276,39 +259,6 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $this->tpl->setContent($form->getHTML());
     }
 
-    protected function showContent() : void
-    {
-        $this->tabs->activateTab("content");
-        /** @var ilTemplate $template */
-        $template = $this->plugin->getTemplate("tpl.content.html");
-        /** @var ilObjCryptPad $object */
-        $object = $this->object;
-        $template->setVariable("TITLE", $object->getTitle());
-        $template->setVariable("DESCRIPTION", $object->getDescription());
-        $template->setVariable("ONLINE_STATUS", $object->isOnline()?"Online":"Offline");
-        $template->setVariable("ONLINE_COLOR", $object->isOnline()?"green":"red");
-
-        $template->setVariable("SET_COMPLETED", $this->ctrl->getLinkTarget($this, "setStatusToCompleted"));
-        $template->setVariable("SET_COMPLETED_TXT", $this->plugin->txt("set_completed"));
-
-        $template->setVariable("SET_NOT_ATTEMPTED", $this->ctrl->getLinkTarget($this, "setStatusToNotAttempted"));
-        $template->setVariable("SET_NOT_ATTEMPTED_TXT", $this->plugin->txt("set_not_attempted"));
-
-        $template->setVariable("SET_FAILED", $this->ctrl->getLinkTarget($this, "setStatusToFailed"));
-        $template->setVariable("SET_FAILED_TXT", $this->plugin->txt("set_failed"));
-
-        $template->setVariable("SET_IN_PROGRESS", $this->ctrl->getLinkTarget($this, "setStatusToInProgress"));
-        $template->setVariable("SET_IN_PROGRESS_TXT", $this->plugin->txt("set_in_progress"));
-
-        global $ilUser;
-        $progress = new ilLPStatusPlugin($this->object->getId());
-        $status = $progress->determineStatus($this->object->getId(), $ilUser->getId());
-        $template->setVariable("LP_STATUS", $this->plugin->txt("lp_status_" . $status));
-        $template->setVariable("LP_INFO", $this->plugin->txt("lp_status_info"));
-
-        $this->tpl->setContent($template->get());
-    }
-
     /**
      * @param $object ilObjCryptPad
      * @param $form ilPropertyFormGUI
@@ -319,42 +269,5 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $object->setDescription($form->getInput('description'));
         $object->setOnline($form->getInput('online'));
         $object->setDocLink($form->getInput('docLink'));
-    }
-
-    protected function showExport() : void
-    {
-        require_once("./Services/Export/classes/class.ilExportGUI.php");
-        $export = new ilExportGUI($this);
-        $export->addFormat("xml");
-        $ret = $this->ctrl->forwardCommand($export);
-    }
-
-
-    private function setStatusToCompleted() : void
-    {
-        $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_COMPLETED_NUM);
-    }
-
-    private function setStatusAndRedirect($status) : void
-    {
-        global $ilUser;
-        $_SESSION[self::LP_SESSION_ID] = $status;
-        ilLPStatusWrapper::_updateStatus($this->object->getId(), $ilUser->getId());
-        $this->ctrl->redirect($this, $this->getStandardCmd());
-    }
-
-    protected function setStatusToFailed() : void
-    {
-        $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_FAILED_NUM);
-    }
-
-    protected function setStatusToInProgress() : void
-    {
-        $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_IN_PROGRESS_NUM);
-    }
-
-    protected function setStatusToNotAttempted() : void
-    {
-        $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM);
     }
 }

@@ -87,6 +87,18 @@ class ilCryptPadConfigGUI extends ilPluginConfigGUI
         $text->setValue($val);
         $form->addItem($text);
 
+        $textWidth = new ilTextInputGUI($this->plugin_object->txt("width"), "width");
+        $width = \CryptPad\Repository\PluginConstRepository::getInstance()->readBy('name', "width")[0];
+        $width = $width ? $width->getValue() : "";
+        $textWidth->setValue($width);
+        $form->addItem($textWidth);
+
+        $textHeight = new ilTextInputGUI($this->plugin_object->txt("height"), "height");
+        $height = \CryptPad\Repository\PluginConstRepository::getInstance()->readBy('name', "height")[0];
+        $height = $height ? $height->getValue() : "";
+        $textHeight->setValue($height);
+        $form->addItem($textHeight);
+
         $form->setFormAction($this->ctrl->getFormAction($this, "saveProperties"));
         $form->addCommandButton("saveProperties", $this->plugin->txt("update"));
 
@@ -98,6 +110,18 @@ class ilCryptPadConfigGUI extends ilPluginConfigGUI
         $server = $this->request->getParsedBody()["server"];
         $pluginConst = new \CryptPad\Model\PluginConst();
         $pluginConst->setName("server");
+        $pluginConst->setValue($server);
+        \CryptPad\Repository\PluginConstRepository::getInstance()->updateOrCreate($pluginConst);
+
+        $server = $this->request->getParsedBody()["width"];
+        $pluginConst = new \CryptPad\Model\PluginConst();
+        $pluginConst->setName("width");
+        $pluginConst->setValue($server);
+        \CryptPad\Repository\PluginConstRepository::getInstance()->updateOrCreate($pluginConst);
+
+        $server = $this->request->getParsedBody()["height"];
+        $pluginConst = new \CryptPad\Model\PluginConst();
+        $pluginConst->setName("height");
         $pluginConst->setValue($server);
         \CryptPad\Repository\PluginConstRepository::getInstance()->updateOrCreate($pluginConst);
         $this->showConfigurationGui();

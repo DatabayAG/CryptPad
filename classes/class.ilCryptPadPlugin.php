@@ -3,6 +3,8 @@
 include_once("./Services/Repository/classes/class.ilRepositoryObjectPlugin.php");
 
 /**
+ * Class ilCryptPadPlugin
+ * @author Fabian Helfer <fhelfer@databay.de>
  */
 class ilCryptPadPlugin extends ilRepositoryObjectPlugin
 {
