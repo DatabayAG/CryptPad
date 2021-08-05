@@ -37,30 +37,30 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * Create object
      */
-    public function doCreate(): void
+    public function doCreate() : void
     {
         global $ilDB, $ilUser;
 
-        $ilDB->manipulate("INSERT INTO rep_robj_xcrp_data ".
-            "(id, is_online, doc_link) VALUES (".
-            $ilDB->quote($this->getId(), "integer").",".
-            $ilDB->quote(0, "integer").",".
-            "null".
+        $ilDB->manipulate("INSERT INTO rep_robj_xcrp_data " .
+            "(id, is_online, doc_link) VALUES (" .
+            $ilDB->quote($this->getId(), "integer") . "," .
+            $ilDB->quote(0, "integer") . "," .
+            "null" .
             ")");
     }
 
     /**
      * Read data from db
      */
-    public function doRead(): void
+    public function doRead() : void
     {
         global $ilDB;
 
-        $set = $ilDB->query("SELECT * FROM rep_robj_xcrp_data ".
-            " WHERE id = ".$ilDB->quote($this->getId(), "integer")
+        $set = $ilDB->query(
+            "SELECT * FROM rep_robj_xcrp_data " .
+            " WHERE id = " . $ilDB->quote($this->getId(), "integer")
         );
-        while ($rec = $ilDB->fetchAssoc($set))
-        {
+        while ($rec = $ilDB->fetchAssoc($set)) {
             $this->setOnline($rec["is_online"]);
             $this->setDocLink($rec['doc_link']);
         }
@@ -69,33 +69,35 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     /**
      * Update data
      */
-    public function doUpdate(): void
+    public function doUpdate() : void
     {
         global $ilDB;
 
-        $ilDB->manipulate($up = "UPDATE rep_robj_xcrp_data SET ".
-            " is_online = ".$ilDB->quote($this->isOnline(), "integer").", ".
-            " doc_link = ".$ilDB->quote($this->getDocLink(), "text")." ".
-            " WHERE id = ".$ilDB->quote($this->getId(), "integer")
+        $ilDB->manipulate(
+            $up = "UPDATE rep_robj_xcrp_data SET " .
+            " is_online = " . $ilDB->quote($this->isOnline(), "integer") . ", " .
+            " doc_link = " . $ilDB->quote($this->getDocLink(), "text") . " " .
+            " WHERE id = " . $ilDB->quote($this->getId(), "integer")
         );
     }
 
     /**
      * Delete data from db
      */
-    public function doDelete(): void
+    public function doDelete() : void
     {
         global $ilDB;
 
-        $ilDB->manipulate("DELETE FROM rep_robj_xcrp_data WHERE ".
-            " id = ".$ilDB->quote($this->getId(), "integer")
+        $ilDB->manipulate(
+            "DELETE FROM rep_robj_xcrp_data WHERE " .
+            " id = " . $ilDB->quote($this->getId(), "integer")
         );
     }
 
     /**
      * Do Cloning
      */
-    public function doClone($a_target_id,$a_copy_id,$new_obj) : void
+    public function doClone($a_target_id, $a_copy_id, $new_obj) : void
     {
         global $ilDB;
 
@@ -175,10 +177,11 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
     public function getLPStatusForUser($a_user_id) : int
     {
         global $ilUser;
-        if($ilUser->getId() == $a_user_id)
+        if ($ilUser->getId() == $a_user_id) {
             return $_SESSION[ilObjCryptPadGUI::LP_SESSION_ID];
-        else
+        } else {
             return ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM;
+        }
     }
 
     /**
@@ -197,4 +200,3 @@ class ilObjCryptPad extends ilObjectPlugin implements ilLPStatusPluginInterface
         $this->docLink = $docLink;
     }
 }
-?>

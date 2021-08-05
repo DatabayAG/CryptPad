@@ -15,7 +15,7 @@ class ilObjCryptPadListGUI extends ilObjectPluginListGUI
     /**
      * Init type
      */
-    public function initType(): void
+    public function initType() : void
     {
         $this->setType(ilCryptPadPlugin::ID);
     }
@@ -33,8 +33,7 @@ class ilObjCryptPadListGUI extends ilObjectPluginListGUI
      */
     public function initCommands() : array
     {
-        return array
-        (
+        return array(
             array(
                 "permission" => "read",
                 "cmd" => "showContent",
@@ -57,13 +56,11 @@ class ilObjCryptPadListGUI extends ilObjectPluginListGUI
      */
     public function getProperties() : array
     {
-        global $lng, $ilUser;
 
         $props = array();
 
         $this->plugin->includeClass("class.ilObjCryptPadAccess.php");
-        if (!ilObjCryptPadAccess::checkOnline($this->obj_id))
-        {
+        if (!ilObjCryptPadAccess::checkOnline($this->obj_id)) {
             $props[] = array("alert" => true, "property" => $this->txt("status"),
                              "value" => $this->txt("offline"));
         }

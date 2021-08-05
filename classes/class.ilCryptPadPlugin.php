@@ -50,12 +50,12 @@ class ilCryptPadPlugin extends ilRepositoryObjectPlugin
     }
 
     // must correspond to the plugin subdirectory
-    function getPluginName() : string
+    public function getPluginName() : string
     {
         return "CryptPad";
     }
 
-    protected function uninstallCustom(): void
+    protected function uninstallCustom() : void
     {
         // TODO: Nothing to do here.
     }
@@ -72,11 +72,11 @@ class ilCryptPadPlugin extends ilRepositoryObjectPlugin
     public static function getInstance() : self
     {
         return self::$instance ?? (self::$instance = ilPluginAdmin::getPluginObject(
-                self::CTYPE,
-                self::CNAME,
-                self::SLOT_ID,
-                self::PNAME
-            ));
+            self::CTYPE,
+            self::CNAME,
+            self::SLOT_ID,
+            self::PNAME
+        ));
     }
 
     public function isAtLeastIlias6() : bool
@@ -84,4 +84,3 @@ class ilCryptPadPlugin extends ilRepositoryObjectPlugin
         return version_compare(ILIAS_VERSION_NUMERIC, '6.0.0', '>=');
     }
 }
-?>

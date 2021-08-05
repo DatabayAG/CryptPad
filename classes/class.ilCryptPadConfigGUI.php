@@ -57,7 +57,7 @@ class ilCryptPadConfigGUI extends ilPluginConfigGUI
     /**
      * @param $cmd
      */
-    public function performCommand($cmd): void
+    public function performCommand($cmd) : void
     {
         try {
             $this->plugin = ilCryptPadPlugin::getInstance();
@@ -81,7 +81,7 @@ class ilCryptPadConfigGUI extends ilPluginConfigGUI
         $form = new ilPropertyFormGUI();
         $form->setTitle($this->plugin_object->txt("Configuration"));
 
-        $text = new ilTextInputGUI($this->plugin_object->txt("server-address"),"server");
+        $text = new ilTextInputGUI($this->plugin_object->txt("server-address"), "server");
         $val = \CryptPad\Repository\PluginConstRepository::getInstance()->readBy('name', "server")[0];
         $val = $val ? $val->getValue() : "";
         $text->setValue($val);

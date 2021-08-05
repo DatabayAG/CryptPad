@@ -27,12 +27,11 @@ class DefaultController extends Base
 
     public function showContentCmd() : string
     {
-
         $this->getCoreController()->tabs->activateTab("content");
         $link = $this->getCoreController()->object->getDocLink();
-        if(!$link) {
+        if (!$link) {
             $server = PluginConstRepository::getInstance()->readBy("name", "server")[0];
-            if($server) {
+            if ($server) {
                 $link = $server->getValue();
             } else {
                 return $this->getCoreController()->getPluginObject()->txt("server-missing");

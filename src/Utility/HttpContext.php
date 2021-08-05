@@ -57,17 +57,14 @@ trait HttpContext
      */
     final public function isOneOfCommandClasses(array $cmdClasses) : bool
     {
-        if (! $this->hasCommandClass()) {
+        if (!$this->hasCommandClass()) {
             return false;
         }
 
-        return in_array(
-            strtolower($this->httpRequest->getQueryParams()['cmdClass']),
-            array_map(
-                'strtolower',
-                $cmdClasses
-            )
-        );
+        return in_array(strtolower($this->httpRequest->getQueryParams()['cmdClass']), array_map(
+            'strtolower',
+            $cmdClasses
+        ), true);
     }
 
     /**
@@ -75,13 +72,10 @@ trait HttpContext
      */
     final public function isOneOfCommands(array $commands) : bool
     {
-        return in_array(
-            strtolower((string) $this->ctrl->getCmd()),
-            array_map(
-                'strtolower',
-                $commands
-            )
-        );
+        return in_array(strtolower((string) $this->ctrl->getCmd()), array_map(
+            'strtolower',
+            $commands
+        ), true);
     }
 
     /**
@@ -94,15 +88,13 @@ trait HttpContext
                 $command = (new ReflectionClass($command))->getShortName();
             }
 
-            return false !== strpos(strtolower((string) $this->ctrl->getCmd()), strtolower($command));
+            return false !== stripos((string) $this->ctrl->getCmd(), $command);
         })) > 0;
     }
 
     final public function getRefId() : int
     {
-        $refId = (int) ($this->httpRequest->getQueryParams()['ref_id'] ?? 0);
-
-        return $refId;
+        return (int) ($this->httpRequest->getQueryParams()['ref_id'] ?? 0);
     }
 
     final public function getExerciseRefId() : int

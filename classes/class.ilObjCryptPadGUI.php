@@ -41,7 +41,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * Initialisation
      */
-    protected function afterConstructor()
+    protected function afterConstructor() : void
     {
         global $ilCtrl, $ilTabs, $tpl, $DIC;
         $this->dic = $DIC;
@@ -53,7 +53,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     /**
      * @param ilCryptPadPlugin $a_val
      */
-    final public function setPluginObject($a_val) : void
+    final public function setPluginObject(ilCryptPadPlugin $a_val) : void
     {
         $this->plugin_object = $a_val;
     }
@@ -67,7 +67,8 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         return $this->plugin_object;
     }
 
-    public function executeCommand() {
+    public function executeCommand()
+    {
         global $tpl;
 
 
@@ -90,9 +91,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
                 break;
         }
 
-        $return_value = parent::executeCommand();
-
-        return $return_value;
+        return parent::executeCommand();
     }
 
     /**
@@ -125,6 +124,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
                 break;
             case "showContent":
                 $cmd = 'DefaultController' . $cmd;
+                // no break
             default:
                 $this->setPluginObject(ilCryptPadPlugin::getInstance());
                 $nextClass = $this->dic->ctrl()->getNextClass();
@@ -163,19 +163,18 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     }
 
 //
-// DISPLAY TABS
+    // DISPLAY TABS
 //
 
     /**
      * Set tabs
      */
-    public function setTabs(): void
+    public function setTabs() : void
     {
         global $ilCtrl, $ilAccess;
 
         // tab for the "show content" command
-        if ($ilAccess->checkAccess("read", "", $this->object->getRefId()))
-        {
+        if ($ilAccess->checkAccess("read", "", $this->object->getRefId())) {
             $this->tabs->addTab("content", $this->txt("content"), $ilCtrl->getLinkTarget($this, "showContent"));
         }
 
@@ -183,8 +182,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $this->addInfoTab();
 
         // a "properties" tab
-        if ($ilAccess->checkAccess("write", "", $this->object->getRefId()))
-        {
+        if ($ilAccess->checkAccess("write", "", $this->object->getRefId())) {
             $this->tabs->addTab("properties", $this->txt("properties"), $ilCtrl->getLinkTarget($this, "editProperties"));
         }
 
@@ -200,7 +198,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     {
         $next_class = $this->ctrl->getCmdClass();
 
-        switch($next_class) {
+        switch ($next_class) {
             case 'ilexportgui':
                 $this->tabs->activateTab("export");
                 break;
@@ -269,7 +267,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     {
         $form = $this->initPropertiesForm();
         $form->setValuesByPost();
-        if($form->checkInput()) {
+        if ($form->checkInput()) {
             $this->fillObject($this->object, $form);
             $this->object->update();
             ilUtil::sendSuccess($this->plugin->txt("update_successful"), true);
@@ -305,7 +303,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         global $ilUser;
         $progress = new ilLPStatusPlugin($this->object->getId());
         $status = $progress->determineStatus($this->object->getId(), $ilUser->getId());
-        $template->setVariable("LP_STATUS", $this->plugin->txt("lp_status_".$status));
+        $template->setVariable("LP_STATUS", $this->plugin->txt("lp_status_" . $status));
         $template->setVariable("LP_INFO", $this->plugin->txt("lp_status_info"));
 
         $this->tpl->setContent($template->get());
@@ -329,7 +327,6 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $export = new ilExportGUI($this);
         $export->addFormat("xml");
         $ret = $this->ctrl->forwardCommand($export);
-
     }
 
 
@@ -360,8 +357,4 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
     {
         $this->setStatusAndRedirect(ilLPStatus::LP_STATUS_NOT_ATTEMPTED_NUM);
     }
-
-
-
 }
-?>

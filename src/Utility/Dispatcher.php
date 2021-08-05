@@ -20,7 +20,7 @@ class Dispatcher
     /** @var \ilObjCryptPadGUI */
     private $coreController;
     /** @var string */
-    private $defaultController = '';
+    private $defaultController;
     /** @var Container */
     private $dic;
 
@@ -31,10 +31,10 @@ class Dispatcher
     /**
      * Dispatcher constructor.
      */
-    private function __construct(\ilObjCryptPadGUI $baseController, string $defaultController = '')
+    private function __construct(\ilObjCryptPadGUI $baseController)
     {
         $this->coreController = $baseController;
-        $this->defaultController = $defaultController;
+        $this->defaultController = '';
     }
 
     public function setDic(Container $dic) : void
@@ -53,8 +53,7 @@ class Dispatcher
 
     public function dispatch(string $cmd) : string
     {
-        switch ($cmd)
-        {
+        switch ($cmd) {
             case "editProperties":   // list all commands that need write permission here
             case "updateProperties":
             case "saveProperties":

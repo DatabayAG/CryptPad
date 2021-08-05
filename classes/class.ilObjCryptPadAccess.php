@@ -30,17 +30,14 @@ class ilObjCryptPadAccess extends ilObjectPluginAccess
     {
         global $ilUser, $ilAccess;
 
-        if ($a_user_id == "")
-        {
+        if ($a_user_id == "") {
             $a_user_id = $ilUser->getId();
         }
 
-        switch ($a_permission)
-        {
+        switch ($a_permission) {
             case "read":
                 if (!self::checkOnline($a_obj_id) &&
-                    !$ilAccess->checkAccessOfUser($a_user_id, "write", "", $a_ref_id))
-                {
+                    !$ilAccess->checkAccessOfUser($a_user_id, "write", "", $a_ref_id)) {
                     return false;
                 }
                 break;
@@ -56,13 +53,11 @@ class ilObjCryptPadAccess extends ilObjectPluginAccess
     {
         global $ilDB;
 
-        $set = $ilDB->query("SELECT is_online FROM rep_robj_xcrp_data ".
-            " WHERE id = ".$ilDB->quote($a_id, "integer")
+        $set = $ilDB->query(
+            "SELECT is_online FROM rep_robj_xcrp_data " .
+            " WHERE id = " . $ilDB->quote($a_id, "integer")
         );
-        $rec  = $ilDB->fetchAssoc($set);
+        $rec = $ilDB->fetchAssoc($set);
         return (boolean) $rec["is_online"];
     }
-
 }
-
-?>

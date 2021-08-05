@@ -8,13 +8,6 @@ use ilDBInterface;
 use CryptPad\Model\PluginConst;
 use ilPDOStatement;
 
-/** TODO: replace:
- *   PluginConst => Name of Model Class
- *   rep_robj_xcrp_const => Table Name
- *   pluginConst => var of model
- *   CryptPad => namespace plugin
- *
- * */
 /**
  * Class PluginConstRepository
  * @author Fabian Helfer <fhelfer@databay.de>
@@ -36,14 +29,13 @@ class PluginConstRepository
      */
     private $tablename = 'rep_robj_xcrp_const';
 
-    // TODO: fields
     /**
      * @var array
      */
     private $fields = [
-        'id'               => ['integer', 'int'],
-        'name'           => ['text'],
-        'value'           => ['text'],
+        'id' => ['integer', 'int'],
+        'name' => ['text'],
+        'value' => ['text'],
     ];
 
     /**
@@ -80,12 +72,10 @@ class PluginConstRepository
      * @param PluginConst $pluginConst
      * @return PluginConst
      */
-    // TODO: model attributes
     public function create(PluginConst $pluginConst) : PluginConst
     {
-
         if (empty($pluginConst->getId())) {
-            $pluginConst->setId(((int)$this->db->nextId($this->tablename)));
+            $pluginConst->setId(((int) $this->db->nextId($this->tablename)));
         }
         $this->db->manipulateF(
             'INSERT INTO ' . $this->tablename . ' (id, name, value) VALUES ' .
@@ -110,7 +100,7 @@ class PluginConstRepository
     public function readBy($attr, $value) : array
     {
         $result = $this->db->query('SELECT * FROM ' . $this->tablename . " WHERE {$attr} = "
-        . $this->db->quote($value , "string"));
+        . $this->db->quote($value, "string"));
 
         return $this->readQuery($result);
     }
@@ -156,8 +146,6 @@ class PluginConstRepository
         return $this->readQuery($result)[0];
     }
 
-    // TODO: model attributes
-
     /**
      * Executes Query and returns result in array
      * @param ilPDOStatement $query
@@ -198,10 +186,10 @@ class PluginConstRepository
     /**
      * @param PluginConst $pluginConst
      */
-    public function updateOrCreate(PluginConst $pluginConst)
+    public function updateOrCreate(PluginConst $pluginConst) : void
     {
         $pluginConstGet = $this->readBy("name", $pluginConst->getName())[0];
-        if($pluginConstGet) {
+        if ($pluginConstGet) {
             self::getInstance()->update($pluginConstGet->getId(), ['value' => $pluginConst->getValue()]);
         } else {
             self::getInstance()->create($pluginConst);
@@ -215,6 +203,5 @@ class PluginConstRepository
     public function delete(int $id) : void
     {
         $this->db->manipulate("DELETE FROM {$this->tablename} WHERE id = {$this->db->quote($id, 'integer')}");
-
     }
 }
