@@ -123,6 +123,7 @@ class ilObjCryptPadGUI extends ilObjectPluginGUI
         $template->setVariable("VAL_URL", $link);
         $template->setVariable("VAL_WIDTH", $width);
         $template->setVariable("VAL_HEIGHT", $height);
+        $template->setVariable("VAL_WARNING", $this->plugin->txt("iframe-warning"));
         $template->parseCurrentBlock();
 
         $this->tpl->setContent($template->get());

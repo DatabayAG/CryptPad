@@ -50,3 +50,4 @@ info-doc-link#:#e.g. http://www.example.com/pad/#/2/pad/edit/oXKoGujRYhYgHnX+qDF
 explanation-doc-link#:#Click share in the Document and copy the given link
 height#:#Height of the CryptPad window
 width#:#Width of the CryptPad window
+iframe-warning#:#Unfortunately, your browser cannot display embedded frames: You can access the embedded page via the following link:
