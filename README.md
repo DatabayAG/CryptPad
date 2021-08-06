@@ -3,10 +3,37 @@
 ILIAS Repository Object Plugin 
 
 ## Table of Contents
+* [Description](#description)
 * [Requirement](#requirement)
 * [Installation](#installation)
 * [CryptPad Installation](#cryptpad-installation)
 
+## Description
+### What is CryptPad
+CryptPad is a Open-Source, encrypted collaboration suite. Documents of the usual types (word, excel, powerpoint, ...) can be created and edited in collaboration with other users.
+
+### What does CryptPad Plugin for Ilias?
+CryptPad is a repository object plugin.  
+Once installed, it can be added in the magazine.  
+Before using it for the first time, an administrator should have set up a server via the Plugin configuration.  
+The start page of Cryptpad is displayed the first time it is used. A document can be created here as required. The link can then be entered in the settings, which means that the created pad will now be displayed for all users with access to the object.
+
+### Visual Guide
+Startpage after adding the Object:
+![](./resources/ILIAS-CryptPad-homepage.png)
+After creating a document link can be found here:
+![](./resources/ILIAS-CryptPad-share-link.png)
+Add the link in Properties Tab:
+![](./resources/ILIAS-CryptPad-edit-link.png)
+Now the Document will be displayed in Content Tab:
+![](./resources/ILIAS-CryptPad_word.png)
+
+### Configuration
+![](./resources/ILIAS-Plugin-CryptPad-config.png)
+Window size and server location can be configured for the plugin.
+
+### Additional Information
+User Management inside the Plugin controlled by Ilias is not possible. Users will have to log in themselves or edit their Anonymous name tag when working together in the document
 
 ## Requirement
 
